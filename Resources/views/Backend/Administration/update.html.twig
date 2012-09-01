@@ -1,0 +1,30 @@
+{% extends "NeutronAdminBundle::layout.html.twig" %}
+
+{% block headTitle %} {% trans from "NeutronBlockTextBundle" %}head_title{% endtrans %} {% endblock %}
+
+{% block headDesc %}
+    <h1 class="icon dashboard">
+        {% trans from "NeutronBlockTextBundle" %}header{% endtrans %} <small>some description</small>
+    </h1>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="grid12">
+		<article class="panel">
+		 	<header class="divider">
+		 	    <h2>{% trans from "NeutronBlockTextBundle" %}subheader{% endtrans %}</h2>
+		 	</header>
+
+		 	{{ neutron_form_tabs(
+		 	    form, 
+		 	    {'submit_label': 'form.save', 'translation_domain': 'NeutronBlockTextBundle'},
+		 	    {
+		 	        'cancel': {'label': 'form.cancel', 'style': 'btn action', 'url': path('neutron_block_text.administration')}
+		 	    }
+		 	) }}
+		</article>
+
+	</div>
+</div>
+{% endblock %}
