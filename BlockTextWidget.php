@@ -1,6 +1,8 @@
 <?php
 namespace Neutron\Widget\BlockTextBundle;
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 use Neutron\LayoutBundle\Event\ConfigureWidgetEvent;
 
 use Neutron\LayoutBundle\LayoutEvents;
@@ -11,35 +13,44 @@ use Neutron\LayoutBundle\Widget\WidgetFactoryInterface;
 
 use Neutron\LayoutBundle\Model\Widget\WidgetManagerInterface;
 
+
 class BlockTextWidget
 {
+    const IDENTIFIER = 'neutron.widget.block_text';
+    
     protected $dispatcher;
     
     protected $factory; 
     
     protected $manager;
+    
+    protected $translator;
+    
+    protected $options;
 
     public function __construct(EventDispatcherInterface $dispatcher, WidgetFactoryInterface $factory, 
-        WidgetManagerInterface $manager)
+        WidgetManagerInterface $manager, TranslatorInterface $translator, array $options)
     {
         $this->dispatcher = $dispatcher;
         $this->factory = $factory;
         $this->manager = $manager;
+        $this->translator = $translator;
+        $this->options = $options;
     }
     
     public function build()
     {
-        $widget = $this->factory->createWidget('neutron.widget.block_text');
+        $widget = $this->factory->createWidget(self::IDENTIFIER);
         $widget
-            ->setLabel('widget.block_text.label')
-            ->setDescription('widget.block_text.desc')
+            ->setLabel($this->translator->trans('widget.block_text.label', array(), 'NeutronBlockTextBundle'))
+            ->setDescription($this->translator->trans('widget.block_text.desc', array(), 'NeutronBlockTextBundle'))
             ->setAdministrationRoute('neutron_block_text.administration')
             ->setFrontController('NeutronBlockTextBundle:Frontend\Default:index')
             ->setManager($this->manager)
-            ->enablePluginAware(true)
-            ->setAllowedPlugins(array('neutron.plugin.page'))
-            ->enablePanelAware(true)
-            ->setAllowedPanels(array('page_panel_footer_left'))
+            ->enablePluginAware($this->options['plugin_aware'])
+            ->setAllowedPlugins($this->options['allowed_plugins'])
+            ->enablePanelAware($this->options['panel_aware'])
+            ->setAllowedPanels($this->options['allowed_panels'])
         ;
         
         $this->dispatcher->dispatch(

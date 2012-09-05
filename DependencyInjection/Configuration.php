@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('neutron_block_text');
         
         $this->addGeneralConfigurations($rootNode);
+        $this->addWidgetOptionsSection($rootNode);
         $this->addFormSection($rootNode);
 
         return $treeBuilder;
@@ -39,19 +40,36 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('controller_administration')->defaultValue('neutron_block_text.controller.administration.default')->end()
                 ->scalarNode('controller_front')->defaultValue('neutron_block_text.controller.front.default')->end()
                 ->scalarNode('manager')->defaultValue('neutron_block_text.manager.default')->end()
-                ->scalarNode('block_text_class')->defaultValue('Neutron\Widget\BlockTextBundle\Entity\BlockText')->end()
+                ->scalarNode('grid')->defaultValue('block_text_management')->end()
+                ->scalarNode('block_text_class')->isRequired()->cannotBeEmpty()->end()
                 ->arrayNode('templates')
-                ->defaultValue(array(
-                    'NeutronBlockTextBundle:Frontend\Template:standard.html.twig' => 'template.standard'
-                ))
-                ->validate()
-                    ->ifTrue(function($v){
-                        return empty($v);
-                    })
-                    ->thenInvalid('You should provide at least one template.')
+                    ->useAttributeAsKey('name')
+                    ->prototype('scalar')->end()
+                    ->defaultValue(array())
                 ->end()
-                ->useAttributeAsKey('name')
-                    ->prototype('scalar')
+            ->end()
+        ;
+    }
+    
+    private function addWidgetOptionsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('widget_options')
+                    ->addDefaultsIfNotSet()
+                        ->children()
+                            ->booleanNode('plugin_aware')->defaultFalse()->end()
+                            ->booleanNode('panel_aware')->defaultFalse()->end()
+                            ->arrayNode('allowed_plugins')
+                                ->prototype('scalar')->end()
+                                ->defaultValue(array())
+                            ->end()
+                            ->arrayNode('allowed_panels')
+                                ->prototype('scalar')->end()
+                                ->defaultValue(array())
+                            ->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;

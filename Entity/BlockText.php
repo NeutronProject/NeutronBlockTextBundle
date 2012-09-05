@@ -16,12 +16,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Gedmo\TranslationEntity(class="Neutron\Widget\BlockTextBundle\Entity\Translation\BlockTextTranslation")
- * @ORM\Table(name="neutron_widget_block_text")
- * @ORM\Entity(repositoryClass="Neutron\Widget\BlockTextBundle\Entity\Repository\BlockTextRepository")
- * 
+ * @ORM\MappedSuperclass
  */
-class BlockText implements BlockTextInterface
+abstract class BlockText implements BlockTextInterface
 {
     /**
      * @var integer 

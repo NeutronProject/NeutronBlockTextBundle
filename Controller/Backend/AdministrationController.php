@@ -40,7 +40,9 @@ class AdministrationController extends ContainerAware
      */
     public function indexAction()
     {    
-        $grid = $this->container->get('neutron.datagrid')->get('block_text_management');
+        $grid = $this->container->get('neutron.datagrid')->get(
+            $this->container->getParameter('neutron_block_text.grid')
+        );
         
         $template = $this->container->get('templating')
             ->render('NeutronBlockTextBundle:Backend\Administration:index.html.twig', array(
