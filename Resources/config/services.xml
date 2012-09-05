@@ -6,7 +6,6 @@
  
     <parameters>
         <parameter key="neutron_block_text.widget.builder.class">Neutron\Widget\BlockTextBundle\BlockTextWidget</parameter>         
-        <parameter key="neutron_block_text.event_listener.main_menu.class">Neutron\Widget\BlockTextBundle\EventListener\MainMenuListener</parameter>         
         <parameter key="neutron_block_text.controller.administration.default.class">Neutron\Widget\BlockTextBundle\Controller\Backend\AdministrationController</parameter>         
         <parameter key="neutron_block_text.controller.front.default.class">Neutron\Widget\BlockTextBundle\Controller\Frontend\DefaultController</parameter>         
         <parameter key="neutron_block_text.manager.default.class">Neutron\Widget\BlockTextBundle\Doctrine\ORM\Manager</parameter>         
@@ -32,12 +31,7 @@
         >
         	<tag name="neutron.widget" alias="neutron.widget.block_text" />
         </service>
-        
-        <service id="neutron_block_text.event_listener.main_menu" class="%neutron_block_text.event_listener.main_menu.class%">
-        	<argument type="service" id="neutron_block_text.widget" />
-        	<tag name="kernel.event_listener" event="neutron_admin.onMenuConfigure" method="onMenuConfigure"/> 
-        </service>
-        
+
 		<service id="neutron_block_text.controller.administration.default" class="%neutron_block_text.controller.administration.default.class%">
 		    <call method="setContainer">
 		        <argument type="service" id="service_container" />
