@@ -15,12 +15,13 @@ class DefaultController extends ContainerAware
     public function indexAction($identifier)
     {         
         $manager = $this->container->get('neutron_block_text.manager');
+        $aclManager = $this->container->get('neutron_admin.acl.manager');
         
         $block = $manager->getBlockText($identifier, $this->container->get('request')->getLocale());
         $useAcl = $this->container->getParameter('neutron_block_text.use_acl');
         $isHtml = $this->container->getParameter('neutron_block_text.is_html');
         
-        if (!$block || ($useAcl && !$this->isAllowed($block))){
+        if (!$block || !$aclManager->isGranted($block, 'VIEW')){
             return new Response();
         }
         
@@ -34,15 +35,4 @@ class DefaultController extends ContainerAware
         return  new Response($template);
     }
     
-    // to be removed
-    protected function isAllowed(PageBlockInterface $block)
-    {
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        if ($user != 'anon.' && count(array_intersect($user->getRoles(), BackendRoles::getAdministrativeRoles())) > 0) {
-            return true;
-        }
-    
-        return $securityContext->isGranted('VIEW', $block);
-    }
 }

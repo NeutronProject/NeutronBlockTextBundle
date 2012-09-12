@@ -9,6 +9,8 @@
  */
 namespace Neutron\Widget\BlockTextBundle\Form\Type;
 
+use Neutron\AdminBundle\Acl\AclManagerInterface;
+
 use Symfony\Component\Form\FormView;
 
 use Symfony\Component\Form\FormInterface;
@@ -28,11 +30,11 @@ use Symfony\Component\Form\AbstractType;
 class BlockTextType extends AbstractType
 {
     
-    protected $useAcl;
+    protected $aclManager;
     
-    public function __construct($useAcl)
+    public function __construct(AclManagerInterface $aclManager)
     {
-        $this->useAcl = $useAcl;
+        $this->aclManager = $aclManager;
     }
     
     /**
@@ -43,7 +45,7 @@ class BlockTextType extends AbstractType
     {
         $builder->add('general', 'neutron_block_text_general');
         
-        if ($this->useAcl){
+        if ($this->aclManager->isAclEnabled()){
             $builder->add('acl', 'neutron_admin_form_acl_collection', array(
                 'masks' => array(
                     'VIEW' => 'View',
