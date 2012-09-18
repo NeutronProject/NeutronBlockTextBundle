@@ -30,9 +30,8 @@ class NeutronBlockTextExtension extends Extension
         $container->setAlias('neutron_block_text.manager', $config['manager']);
         $container->setParameter('neutron_block_text.grid', $config['grid']);
         $container->setParameter('neutron_block_text.block_text_class', $config['block_text_class']);
+        $container->setParameter('neutron_block_text.translation_domain', $config['translation_domain']);
         $container->setParameter('neutron_block_text.templates', $config['templates']);
-        $container->setParameter('neutron_block_text.is_html', $config['is_html']);
-        $container->setParameter('neutron_block_text.use_acl', $config['use_acl']);
         
         $container->setParameter('neutron_block_text.widget_options', $config['widget_options']);
         

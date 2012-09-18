@@ -8,7 +8,7 @@
         <parameter key="neutron_block_text.widget.builder.class">Neutron\Widget\BlockTextBundle\BlockTextWidget</parameter>         
         <parameter key="neutron_block_text.controller.administration.default.class">Neutron\Widget\BlockTextBundle\Controller\Backend\AdministrationController</parameter>         
         <parameter key="neutron_block_text.controller.front.default.class">Neutron\Widget\BlockTextBundle\Controller\Frontend\DefaultController</parameter>         
-        <parameter key="neutron_block_text.manager.default.class">Neutron\Widget\BlockTextBundle\Doctrine\ORM\Manager</parameter>         
+        <parameter key="neutron_block_text.manager.default.class">Neutron\Widget\BlockTextBundle\Doctrine\Manager</parameter>         
         <parameter key="neutron_block_text.datagrid.block_text.class">Neutron\Widget\BlockTextBundle\DataGrid\BlockTextDataGrid</parameter>         
         <parameter key="neutron_block_text.form.type.block_text.class">Neutron\Widget\BlockTextBundle\Form\Type\BlockTextType</parameter>         
         <parameter key="neutron_block_text.form.type.block_text.general.class">Neutron\Widget\BlockTextBundle\Form\Type\BlockText\GeneralType</parameter>         
@@ -46,9 +46,17 @@
 		    </call>
 		</service>
 		
-		<service id="neutron_block_text.manager.default" class="%neutron_block_text.manager.default.class%">
-		    <argument type="service" id="doctrine.orm.entity_manager" />
-		    <argument>%neutron_block_text.block_text_class%</argument>
+		<service id="neutron_block_text.manager.default" 
+			class="%neutron_block_text.manager.default.class%"
+			parent="neutron_component.doctrine.manager"
+		>
+			<argument>%use_translatable%</argument>
+		    <call method="setClassName">
+		   		<argument>%neutron_block_text.block_text_class%</argument>
+		    </call>
+		    <call method="setObjectManager">
+		   		<argument type="service" id="object_manager" />
+		    </call>
 		</service>
 		
         <service id="neutron_block_text.datagrid.block_text" 
@@ -84,7 +92,6 @@
         <service id="neutron_block_text.form.type.block_text.general" class="%neutron_block_text.form.type.block_text.general.class%" >
 		  	<argument type="service" id="neutron_block_text.form.event_subscriber.general" />
 		    <argument>%neutron_block_text.block_text_class%</argument>
-		    <argument>%neutron_block_text.is_html%</argument>
 		    <argument>%neutron_block_text.templates%</argument>		    		    
 		    <tag name="form.type" alias="neutron_block_text_general" />
 		</service>
@@ -92,18 +99,25 @@
 		
 		<service id="neutron_block_text.form.handler.block_text.default" 
             class="%neutron_block_text.form.handler.block_text.default.class%" 
+            parent="neutron_component.form.handler"
             scope="request" 
-            public="false">
+            public="false"
+        >
+			<argument type="service" id="neutron_block_text.manager" />
+			<argument type="service" id="neutron_admin.acl.manager" />
 			
-            <argument type="service" id="doctrine.orm.entity_manager" />
-            <argument type="service" id="neutron_block_text.form.block_text" />
-            <argument type="service" id="neutron_component.form.helper.form_helper" />
-            <argument type="service" id="request" />
-            <argument type="service" id="router" />
-            <argument type="service" id="translator" />
-            <argument type="service" id="neutron_block_text.manager" />
-            <argument type="service" id="neutron_admin.acl.manager" />
-            <argument>%neutron_block_text.use_acl%</argument>
+			<call method="setObjectManager">
+				<argument type="service" id="object_manager" />
+			</call>
+			
+			<call method="setForm">
+				<argument type="service" id="neutron_block_text.form.block_text" />
+			</call>
+			
+			<call method="setTranslationDomain">
+				<argument>%neutron_block_text.translation_domain%</argument>
+			</call>
+  
         </service>
     
     	<service id="neutron_block_text.form.event_subscriber.general" class="%neutron_block_text.form.event_subscriber.general.class%">

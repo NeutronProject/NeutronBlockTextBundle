@@ -9,8 +9,6 @@
  */
 namespace Neutron\Widget\BlockTextBundle\Controller\Backend;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Neutron\Widget\BlockTextBundle\Model\BlockTextInterface;
@@ -55,32 +53,10 @@ class AdministrationController extends ContainerAware
     
     public function updateAction($id)
     {
-    
-        $manager = $this->container->get('neutron_block_text.manager');
         $form = $this->container->get('neutron_block_text.form.block_text');
         $handler = $this->container->get('neutron_block_text.form.handler.block_text');
     
-        if (!$id){
-            $block = $manager->create(); 
-        } else {
-            $block = $manager->findOneBy(array('id' => $id));
-        }
-    
-        if (!$block instanceof BlockTextInterface){
-            throw new NotFoundHttpException();
-        }
-        
-        $data = array(
-            'general' => $block
-        );
-        
-        if ($this->container->getParameter('neutron_block_text.use_acl')){
-            $acl = $block->getId() ? $this->container->get('neutron_admin.acl.manager')
-                ->getPermissions(ObjectIdentity::fromDomainObject($block)) : null;
-            $data['acl'] = $acl;
-        }
-    
-        $form->setData($data);
+        $form->setData($this->getData($id));
     
         if (null !== $handler->process()){
             return new Response(json_encode($handler->getResult()));
@@ -97,21 +73,16 @@ class AdministrationController extends ContainerAware
     
     public function deleteAction($id)
     {
-        $manager = $this->container->get('neutron_block_text.manager');
-        $block = $manager->findOneBy(array('id' => $id));
-    
-        if (!$block instanceof BlockTextInterface){
-            throw new NotFoundHttpException();
-        }
-    
+        $block = $this->getBlock($id);
+        
         if ($this->container->get('request')->getMethod() == 'POST'){
-            $this->doDelete($manager, $block);
-    
+            $this->doDelete($block);
             $this->container->get('session')
                 ->getFlashBag()->add('neutron.form.success', array(
                     'type' => 'success',
                     'body' => $this->container->get('translator')
-                        ->trans('flash.deleted', array(), 'NeutronBlockTextBundle')
+                        ->trans('flash.deleted', array(), $this->container
+                                ->getParameter('neutron_block_text.translation_domain'))
                 )
             );
     
@@ -128,14 +99,44 @@ class AdministrationController extends ContainerAware
         return  new Response($template);
     }
     
-    protected function doDelete(BlockTextManagerInterface $blockTextManager, BlockTextInterface $block)
+    protected function doDelete(BlockTextInterface $block)
     {
-        $aclManager = $this->container->get('neutron_admin.acl.manager');
-        $em = $this->container->get('doctrine.orm.entity_manager');
+        $this->container->get('neutron_admin.acl.manager')
+            ->deleteObjectPermissions(ObjectIdentity::fromDomainObject($block));
+        $this->container->get('neutron_block_text.manager')->delete($block, true);
+    }
     
-        $em->transactional(function(EntityManager $em) use ($blockTextManager, $aclManager, $block){
-            $aclManager->deleteObjectPermissions(ObjectIdentity::fromDomainObject($block));
-            $blockTextManager->delete($block);
-        });
+    protected function getBlock($id)
+    {
+        $manager = $this->container->get('neutron_block_text.manager');
+        
+        if (!$id){
+            $block = $manager->create();
+        } else {
+            $block = $manager->findOneBy(array('id' => $id));
+        }
+        
+        if (!$block instanceof BlockTextInterface){
+            throw new NotFoundHttpException();
+        }
+        
+        return $block;
+    }
+    
+    protected function getData($id)
+    {
+        $block = $this->getBlock($id);
+        
+        $data = array(
+            'general' => $block
+        );
+        
+        if ($this->container->getParameter('use_acl')){
+            $acl = $block->getId() ? $this->container->get('neutron_admin.acl.manager')
+                ->getPermissions(ObjectIdentity::fromDomainObject($block)) : null;
+            $data['acl'] = $acl;
+        }
+        
+        return $data;
     }
 }

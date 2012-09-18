@@ -40,59 +40,27 @@ class BlockTextRepository extends TranslationRepository
         return $qb;
     }
     
-    public function getInstancesQuery($locale)
+    public function getInstancesQuery($locale, $useTranslatable)
     {
         $query = $this->getInstancesQueryBulder()->getQuery();
         
-        $query->setHint(
-            Query::HINT_CUSTOM_OUTPUT_WALKER,
-            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
-        );
-        $query->setHint(
-            \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE,
-            $locale
-        );      
-        
+        if ($useTranslatable){
+            $query->setHint(
+                Query::HINT_CUSTOM_OUTPUT_WALKER,
+                'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+            );
+            $query->setHint(
+                \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE,
+                $locale
+            );
+        }
+             
         return $query;
     }
     
-    public function getInstances($locale)
+    public function getInstances($locale, $useTranslatable)
     {
-        return $this->getInstancesQuery($locale)->getArrayResult();
+        return $this->getInstancesQuery($locale, $useTranslatable)->getArrayResult();
     }
     
-    public function getBlockTextQueryBuilder($identifier)
-    {
-        $qb = $this->createQueryBuilder('b');
-        $qb
-            ->select('b')
-            ->where('b.identifier = ?1 AND b.enabled = ?2')
-            ->setParameters(array(
-                1 => $identifier,
-                2 => true,
-            ))
-        ;
-    
-        return $qb;
-    }
-    
-    public function getBlockTextQuery($identifier, $locale)
-    {
-        $query = $this->getBlockTextQueryBuilder($identifier)->getQuery();
-        $query->setHint(
-            Query::HINT_CUSTOM_OUTPUT_WALKER,
-            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
-        );
-        $query->setHint(
-            \Gedmo\Translatable\TranslatableListener::HINT_TRANSLATABLE_LOCALE,
-            $locale
-        );
-    
-        return $query;
-    }
-    
-    public function getBlockText($identifier, $locale)
-    {
-        return $this->getBlockTextQuery($identifier, $locale)->getOneOrNullResult();
-    }
 }

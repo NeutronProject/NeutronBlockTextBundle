@@ -37,12 +37,11 @@ class GeneralType extends AbstractType
     
     protected $templates;
     
-    public function __construct(EventSubscriberInterface $subscriber, $dataClass, $isHtml, array $templates)
+    public function __construct(EventSubscriberInterface $subscriber, $dataClass, array $templates)
     {
         $this->subscriber = $subscriber;
         $this->dataClass = $dataClass;
         $this->templates = $templates;
-        $this->isHtml = $isHtml;
     }
     
     /**
@@ -60,36 +59,15 @@ class GeneralType extends AbstractType
                 'label' => 'form.title',
                 'translation_domain' => 'NeutronBlockTextBundle'
             ))
-        ;
-        
-        if ($this->isHtml){
-            $builder->add('content', 'neutron_tinymce', array(
-                'label' => 'form.content',
-                'security' => array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN'),
-                'translation_domain' => 'NeutronBlockTextBundle',
-                'configs' => array(
-                    'theme' => 'advanced', //simple
-                    'skin'  => 'o2k7',
-                    'skin_variant' => 'black',
-                    //'width' => '60%',
-                    'height' => 300,
-                    'dialog_type' => 'modal',
-                    'readOnly' => false,
-                ),
-            ));
-        } else {
-            $builder->add('content', 'textarea', array(
+            ->add('content', 'textarea', array(
                 'label' => 'form.content',
                 'attr' => array(
                     'rows' => 10
                 ), 
                 'required' => true,
                 'translation_domain' => 'NeutronBlockTextBundle'
-           ));
-        }
-        
-        $builder
-            ->add('template', 'choice', array(
+           ))
+           ->add('template', 'choice', array(
                 'choices' => $this->templates,
                 'multiple' => false,
                 'expanded' => false,
