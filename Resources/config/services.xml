@@ -20,14 +20,14 @@
 	
         <service id="neutron_block_text.widget.builder" class="%neutron_block_text.widget.builder.class%">
             <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="neutron_layout.widget.factory" />
+            <argument type="service" id="neutron_mvc.widget.factory" />
             <argument type="service" id="neutron_block_text.manager" />
             <argument type="service" id="translator" />
             <argument>%neutron_block_text.widget_options%</argument>
         </service>
                 
         <service id="neutron_block_text.widget" 
-        	class="Neutron\LayoutBundle\Widget\WidgetFactory"
+        	class="Neutron\MvcBundle\Widget\WidgetFactory"
         	factory-service="neutron_block_text.widget.builder"
         	factory-method="build"
         >

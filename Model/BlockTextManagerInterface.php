@@ -1,7 +1,7 @@
 <?php
 namespace Neutron\Widget\BlockTextBundle\Model;
 
-use Neutron\LayoutBundle\Model\Widget\WidgetManagerInterface;
+use Neutron\MvcBundle\Model\Widget\WidgetManagerInterface;
 
 interface BlockTextManagerInterface extends WidgetManagerInterface
 {

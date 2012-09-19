@@ -1,18 +1,17 @@
 <?php
 namespace Neutron\Widget\BlockTextBundle;
 
+use Neutron\MvcBundle\Model\Widget\WidgetManagerInterface;
+
 use Symfony\Component\Translation\TranslatorInterface;
 
-use Neutron\LayoutBundle\Event\ConfigureWidgetEvent;
+use Neutron\MvcBundle\Event\ConfigureWidgetEvent;
 
-use Neutron\LayoutBundle\LayoutEvents;
+use Neutron\MvcBundle\MvcEvents;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-use Neutron\LayoutBundle\Widget\WidgetFactoryInterface;
-
-use Neutron\LayoutBundle\Model\Widget\WidgetManagerInterface;
-
+use Neutron\MvcBundle\Widget\WidgetFactoryInterface;
 
 class BlockTextWidget
 {
@@ -54,7 +53,7 @@ class BlockTextWidget
         ;
         
         $this->dispatcher->dispatch(
-            LayoutEvents::onWidgetConfigure,
+            MvcEvents::onWidgetConfigure, 
             new ConfigureWidgetEvent($this->factory, $widget)
         );
         
