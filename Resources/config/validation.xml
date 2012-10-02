@@ -5,38 +5,6 @@
         http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
     <class name="Neutron\Widget\BlockTextBundle\Entity\BlockText">   
-
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
-            <option name="fields">identifier</option>
-            <option name="message">identifier.already_used</option>
-            <option name="groups">
-                <value>create</value>
-            </option>
-        </constraint>
-        
-        <property name="identifier">
-        	<constraint name="NotBlank">
-                <option name="message">identifier.blank</option>
-                <option name="groups">
-                    <value>create</value>
-                </option>
-            </constraint>
-            
-            <constraint name="MaxLength">
-                <option name="limit">50</option>
-                <option name="message">identifier.long</option>
-                <option name="groups">
-                    <value>create</value>
-                </option>
-            </constraint>
-            
-            <constraint name="Regex">
-                <option name="pattern">/^[A-Z_]*$/</option>
-                <option name="match">true</option>
-                <option name="message">identifier.alpha</option>
-                <option name="groups">create</option>
-            </constraint>
-        </property>
 	     
         <property name="title">
         	<constraint name="NotBlank">

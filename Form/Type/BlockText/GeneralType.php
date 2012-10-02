@@ -9,8 +9,6 @@
  */
 namespace Neutron\Widget\BlockTextBundle\Form\Type\BlockText;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 use Symfony\Component\Form\FormView;
 
 use Symfony\Component\Form\FormInterface;
@@ -37,9 +35,8 @@ class GeneralType extends AbstractType
     
     protected $templates;
     
-    public function __construct(EventSubscriberInterface $subscriber, $dataClass, array $templates)
+    public function __construct($dataClass, array $templates)
     {
-        $this->subscriber = $subscriber;
         $this->dataClass = $dataClass;
         $this->templates = $templates;
     }
@@ -51,10 +48,6 @@ class GeneralType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('identifier', 'text', array(
-                'label' => 'form.identifier',
-                'translation_domain' => 'NeutronBlockTextBundle'
-            ))
             ->add('title', 'text', array(
                 'label' => 'form.title',
                 'translation_domain' => 'NeutronBlockTextBundle'
@@ -85,7 +78,6 @@ class GeneralType extends AbstractType
             ))
         ;
         
-        $builder->addEventSubscriber($this->subscriber);
     }
     
     /**

@@ -13,8 +13,7 @@
         <parameter key="neutron_block_text.form.type.block_text.class">Neutron\Widget\BlockTextBundle\Form\Type\BlockTextType</parameter>         
         <parameter key="neutron_block_text.form.type.block_text.general.class">Neutron\Widget\BlockTextBundle\Form\Type\BlockText\GeneralType</parameter>         
         <parameter key="neutron_block_text.form.handler.block_text.default.class">Neutron\Widget\BlockTextBundle\Form\Handler\BlockTextHandler</parameter>         
-        <parameter key="neutron_block_text.form.event_subscriber.general.class">Neutron\Widget\BlockTextBundle\Form\EventSubscriber\GeneralTypeSubscriber</parameter>         
-	</parameters>
+    </parameters>
 	
 	<services>
 	
@@ -90,7 +89,6 @@
 		</service>
         
         <service id="neutron_block_text.form.type.block_text.general" class="%neutron_block_text.form.type.block_text.general.class%" >
-		  	<argument type="service" id="neutron_block_text.form.event_subscriber.general" />
 		    <argument>%neutron_block_text.block_text_class%</argument>
 		    <argument>%neutron_block_text.templates%</argument>		    		    
 		    <tag name="form.type" alias="neutron_block_text_general" />
@@ -119,10 +117,6 @@
 			</call>
   
         </service>
-    
-    	<service id="neutron_block_text.form.event_subscriber.general" class="%neutron_block_text.form.event_subscriber.general.class%">
-		    
-		</service>
 		
 	</services>
 	

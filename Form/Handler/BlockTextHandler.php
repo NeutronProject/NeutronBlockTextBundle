@@ -28,15 +28,13 @@ class BlockTextHandler extends AbstractFormHandler
         
         $block = $this->form->get('general')->getData();
 
-        $this->blockTextManager->update($block);
+        $this->blockTextManager->update($block, true);
         
         if ($this->aclManager->isAclEnabled()){
             $acl = $this->form->get('acl')->getData();
             $this->aclManager
                 ->setObjectPermissions(ObjectIdentity::fromDomainObject($block), $acl);
         }     
-        
-        $this->om->flush();
     }
     
     public function getRedirectUrl()

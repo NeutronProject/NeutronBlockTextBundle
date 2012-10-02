@@ -9,6 +9,8 @@
 */
 namespace Neutron\Widget\BlockTextBundle\Entity;
 
+use Neutron\Widget\BlockTextBundle\BlockTextWidget;
+
 use Neutron\Widget\BlockTextBundle\Model\BlockTextInterface;
 
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -128,6 +130,11 @@ abstract class BlockText implements BlockTextInterface
     public function getLabel()
     {
         return $this->title;
+    }
+    
+    public function getIdentifier()
+    {
+        return BlockTextWidget::IDENTIFIER;
     }
 
 }
