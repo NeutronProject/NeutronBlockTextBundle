@@ -28,14 +28,7 @@ abstract class BlockText implements BlockTextInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-    /**
-     * @var string 
-     *
-     * @ORM\Column(type="string", name="widget_identifier", length=50, nullable=false, unique=true)
-     */
-    protected $identifier;
-    
+
     /**
      * @var string 
      * 
@@ -72,22 +65,6 @@ abstract class BlockText implements BlockTextInterface
     public function getId ()
     {
         return $this->id;
-    }
-
-	/**
-     * @return the $name
-     */
-    public function getIdentifier ()
-    {
-        return $this->identifier;
-    }
-
-	/**
-     * @param string $name
-     */
-    public function setIdentifier ($identifier)
-    {
-        $this->identifier = $identifier;
     }
 
 	/**
@@ -153,6 +130,4 @@ abstract class BlockText implements BlockTextInterface
         return $this->title;
     }
 
-    
-    
 }

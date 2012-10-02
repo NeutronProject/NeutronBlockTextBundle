@@ -10,12 +10,12 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class DefaultController extends ContainerAware
 {
     
-    public function indexAction($identifier)
+    public function indexAction($widgetInstanceId)
     {         
         $manager = $this->container->get('neutron_block_text.manager');
         $aclManager = $this->container->get('neutron_admin.acl.manager');
         
-        $block = $manager->getBlockText($identifier);
+        $block = $manager->getBlockText($widgetInstanceId);
 
         
         if (!$block || !$aclManager->isGranted($block, 'VIEW')){

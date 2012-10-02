@@ -19,7 +19,7 @@ class BlockTextRepository extends TranslationRepository
     {
         $qb = $this->createQueryBuilder('b');
         $qb
-            ->select('b.id, b.title, b.identifier, b.enabled')
+            ->select('b.id, b.title, b.enabled')
         ;
         
         return $qb; 
@@ -29,7 +29,7 @@ class BlockTextRepository extends TranslationRepository
     {
         $qb = $this->createQueryBuilder('b');
         $qb
-            ->select('b.identifier, b.title as label')
+            ->select('b.id, b.title as label')
             ->where('b.enabled = ?1')
             ->orderBy('b.title', 'ASC')
             ->setParameters(array(

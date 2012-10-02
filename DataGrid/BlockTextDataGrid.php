@@ -56,7 +56,6 @@ class BlockTextDataGrid
             ->setAutoWidth(true)
             ->setColNames(array(
                 $this->translator->trans('grid.block_text_management.column.title',  array(), 'NeutronBlockTextBundle'),
-                $this->translator->trans('grid.block_text_management.column.identifier',  array(), 'NeutronBlockTextBundle'),
                 $this->translator->trans('grid.block_text_management.column.enabled',  array(), 'NeutronBlockTextBundle'),
   
 
@@ -66,10 +65,6 @@ class BlockTextDataGrid
                     'name' => 'b.title', 'index' => 'b.title', 'width' => 200, 
                     'align' => 'left', 'sortable' => true, 'search' => true,
                 ), 
-                array(
-                    'name' => 'b.identifier', 'index' => 'b.identifier', 'width' => 200, 
-                    'align' => 'left', 'sortable' => true, 'search' => true,
-                ),  
                 array(
                     'name' => 'b.enabled', 'index' => 'b.enabled',  'width' => 40, 
                     'align' => 'left',  'sortable' => true, 

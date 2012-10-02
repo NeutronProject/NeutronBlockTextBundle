@@ -5,8 +5,6 @@ use Neutron\ComponentBundle\Doctrine\AbstractManager;
 
 use Neutron\Widget\BlockTextBundle\Model\BlockTextManagerInterface;
 
-use Doctrine\ORM\EntityManager;
-
 use Neutron\Widget\BlockTextBundle\Model\BlockTextInterface;
 
 use Neutron\LayoutBundle\Model\Widget\WidgetManagerInterface;
@@ -20,9 +18,9 @@ class Manager extends AbstractManager implements BlockTextManagerInterface
         $this->useTranslatable = $useTranslatable;
     }
     
-    public function get($identifier)
+    public function get($id)
     {
-        return $this->findOneBy(array('identifier' => $identifier));
+        return $this->findOneBy(array('id' => $id));
     }
     
     public function getInstances($locale)
@@ -35,8 +33,8 @@ class Manager extends AbstractManager implements BlockTextManagerInterface
         return $this->repository->getQueryBuilderForBlockTextDataGrid();
     }
     
-    public function getBlockText($identifier)
+    public function getBlockText($id)
     {
-        return $this->repository->findOneBy(array('identifier' => $identifier, 'enabled' => true));
+        return $this->findOneBy(array('id' => $id, 'enabled' => true));
     }
 }
