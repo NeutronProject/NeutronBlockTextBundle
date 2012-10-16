@@ -97,7 +97,6 @@
 		
 		<service id="neutron_block_text.form.handler.block_text.default" 
             class="%neutron_block_text.form.handler.block_text.default.class%" 
-            parent="neutron_component.form.handler"
             scope="request" 
             public="false"
         >
